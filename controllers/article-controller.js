@@ -1,4 +1,5 @@
 const Article = require('../models/article-model')
+const User = require('../models/user-model')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
@@ -101,6 +102,7 @@ class Controller {
     static getCategory(req, res) {
         let query = req.params.category
         Article.find({category: query})
+        .populate('author')
         .then(article=> {
             res.json({
                 message: 'get by category',
@@ -115,17 +117,22 @@ class Controller {
     }
     static getAuthor(req, res) {
         let query = req.params.author
-        Article.find({author: query})
-        .then(article=> {
-            res.json({
-                message: 'get by author',
-                article
-            })
-        })
-        .catch(err=> {
-            res.json({
-                message: err.message
-            })
+        User.findOne({username: query})
+        .then(user=> {
+            if (user) {
+                Article.find({author: user._id})
+                .then(article=> {
+                    res.json({
+                        message: 'get by author',
+                        article
+                    })
+                })
+                .catch(err=> {
+                    res.json({
+                        message: err.message
+                    })
+                })
+            }
         })
     }
 }

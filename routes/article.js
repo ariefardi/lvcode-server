@@ -7,6 +7,7 @@ router.get('/', articleController.getData)
 router.post('/', articleController.postData)
 router.get('/:id', articleController.getOneData)
 router.get('/category/:category', articleController.getCategory)
+router.get('/author/:author', articleController.getAuthor)
 router.delete('/delete/:id', articleController.removeOne)
 router.put('/update/:id', articleController.updateOne)
 
